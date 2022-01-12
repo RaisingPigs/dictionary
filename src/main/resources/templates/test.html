@@ -1,0 +1,25 @@
+<!--suppress ALL-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{/test/translate}" method="post">
+    <input type="text" name="from" value="zh">
+    <input type="text" name="to" value="en">
+    <input type="text" name="word" value="">
+    <input type="submit" value="提交">
+</form>
+
+<p th:text="${transRes}"></p>
+
+<!--<p th:text="${transRes.from}"></p>-->
+<!--<p th:text="${transRes.to}"></p>-->
+<!--<p th:text="${transRes.transResult[0].src}"></p>-->
+<!--<p th:text="${transRes.transResult[0].dst}"></p>-->
+
+</body>
+</html>

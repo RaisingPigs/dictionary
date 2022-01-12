@@ -1,0 +1,185 @@
+<!--suppress ALL-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>潘氏词典</title>
+
+    <div th:replace="common/common::common-header"></div>
+
+</head>
+<body>
+
+<div th:replace="common/common::common-top-nav"></div>
+
+<div class="container">
+    <div class="container  pull-left" style="width: 50%;">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid" style="padding: 0">
+                        <div class="collapse navbar-collapse" style="padding: 0" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav text-center">
+                                <li class="dropdown" style="width: 86px">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-haspopup="true" aria-expanded="false"><span id="choose-from" th:from-type-code="${session.noteTransMsg.fromCode}"></span>
+                                        <span class="caret"></span></a>
+                                    <ul id="query-from-menu" class="dropdown-menu" style="min-width: 86px;">
+                                        <li th:each="languageType : ${languageTypes}" th:from-type-code="${languageType.code}" th:class="${languageType.code == session.noteTransMsg.fromCode}?'from-type-choosed'">
+                                            <a href="#" th:text="${languageType.type}"></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <form th:action="@{/note/note-search}" method="get"
+                                  class="navbar-form navbar-left search-form">
+                                <input id="from" type="hidden" name="from" th:value="${session.noteTransMsg.fromCode}">
+                                <input id="to" type="hidden" name="to" th:value="${session.noteTransMsg.toCode}">
+                                <div class="form-group">
+                                    <input type="text" class="form-control search-input" style="width: 316px"
+                                           name="word" th:value="${session.noteTransMsg?.word}"
+                                           placeholder="搜索" autocomplete="off">
+                                </div>
+                                <button type="submit" class="btn btn-default search-word"
+                                        style="width: 86px; margin-left: 10px;">
+                                    搜索
+                                </button>
+                            </form>
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- /.container-fluid -->
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <p>我的单词本</p>
+                </div>
+                <div class="list-group">
+                    <a href="#" th:each="note:${session?.notes}" class="list-group-item note-list">
+                        <span th:text="${note}"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pull-left" style="width: 50%;">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" style="padding: 4px 0">
+                            <ul class="nav nav-pills" id="query-to-menu">
+                                <li th:class="${languageType.code == session.noteTransMsg.toCode}?'active'"
+                                    th:each="languageType : ${languageTypes}">
+                                    <a th:if="${languageType.id!=1}" th:text="${languageType.type}"
+                                       th:to-type-code="${languageType.code}"
+                                       th:to-type-id="${languageType.id}" style="cursor: pointer"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        
+        <div th:if="${session.noteTransMsg.word != null && session.noteTransMsg.mean == null}" class="row">
+            <div class="col-md-12">
+                <div>
+                    <p>单词释义</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:if="${session.noteTransMsg.word != null && session.noteTransMsg.mean == null}">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4 class="pull-left">单词本里没有收藏这个词! </h4> 
+                        &nbsp;&nbsp;
+                        <a th:href="@{/translate/search(from=auto, to=zh, word=${session.noteTransMsg.word})}" style="line-height: 39px;">
+                            去搜索: [[${session.noteTransMsg.word}]]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${session.noteTransMsg.word != null && session.noteTransMsg.mean != null}" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h1 class="panel-title word-name" th:text="${session.noteTransMsg.word}"></h1>
+                    </div>
+                    <div class="panel-body">
+                        <span>音标: </span>
+                        <span>[[${session.noteTransMsg.pronunciation}]]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div  th:if="${session.noteTransMsg.word != null && session.noteTransMsg.mean != null}"  class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            词义
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p th:text="${session.noteTransMsg.mean}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${session.noteTransMsg.word != null && session.noteTransMsg.mean != null}" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            例句
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p th:text="${session.noteTransMsg.sentence}"></p>
+                        <p th:text="${session.noteTransMsg.sentenceTranslate}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${session.noteTransMsg.word != null && session.noteTransMsg.mean != null}" class=" row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            笔记
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p th:text="${session.noteTransMsg.note}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:if="${session.noteTransMsg.word != null && session.noteTransMsg.mean != null}">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary edit-note-btn"> 编 辑 <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+                <button type="button" class="btn btn-danger del-note-btn"> 删 除 <span class="
+glyphicon glyphicon-trash"></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="APP_PATH" th:href="@{/}">
+<script th:src="@{/res/js/notebook.js}"></script>
+
+</body>
+</html>

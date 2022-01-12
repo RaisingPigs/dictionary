@@ -1,0 +1,68 @@
+<!--suppress ALL-->
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    
+    <!--顶部css和js-->
+    <div th:fragment="common-header">
+        <link rel="stylesheet" th:href="@{/res/bootstrap-3.3.7-dist/css/bootstrap.css}">
+        <script th:src="@{/res/js/jQuery/jquery-3.1.1.min.js}"></script>
+        <script th:src="@{/res/bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    </div>
+    
+</head>
+<body>
+
+<!--顶部导航栏-->
+<div th:fragment="common-top-nav">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid" style="margin: auto 160px">
+            <div class="navbar-header" style="margin-right: 10px;">
+                <a class="navbar-brand" th:href="@{/index}"><b>潘氏词典</b></a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav text-center">
+                    <li th:class="${session.sign == '1'}?'active'" style="width: 100px"><a th:href="@{/index}">查词</a></li>
+                    <li th:class="${session.sign == '2'}?'active'" style="width: 100px"><a th:href="@{/note/notebook}">单词本</a></li>
+                    <li style="width: 100px"><a href="#">历史记录</a></li>
+
+                </ul>
+                <ul th:if="${session.loginUser == null}" class="nav navbar-nav text-center navbar-right">
+                    <li style="width: 75px"><a th:href="@{/user/login}">登录</a></li>
+                    <li style="width: 75px"><a href="#">注册</a></li>
+                </ul>
+                
+                <ul th:if="${session.loginUser!=null}" class="nav navbar-nav text-center navbar-right">
+                    <li class="dropdown" style="width: 100px">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            [[${session.loginUser.name}]]
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" style="min-width: 100px">
+                            <li><a href="#">昵称</a></li>
+                            <li><a href="#">邮箱</a></li>
+                            <li><a href="#">手机</a></li>
+                            <li class="divider"></li>
+                            <li><a th:href="@{/user/logout}">注销</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="common-search-nav">
+</div>
+
+<div th:fragment="common-language-nav">
+</div>
+
+<div th:fragment="common-history-nav">
+</div>
+
+
+</body>
+</html>

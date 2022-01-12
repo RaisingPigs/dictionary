@@ -1,0 +1,169 @@
+<!--suppress ALL-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>潘氏词典</title>
+
+    <div th:replace="common/common::common-header"></div>
+
+</head>
+<body>
+
+<div th:replace="common/common::common-top-nav"></div>
+
+<div class="container">
+    <div class="container  pull-left" style="width: 50%;">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid" style="padding: 0">
+                        <div class="collapse navbar-collapse" style="padding: 0" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav text-center">
+                                <li class="dropdown" style="width: 86px">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-haspopup="true" aria-expanded="false"><span id="choose-from"  th:from-type-code="${session.transMsg.fromCode}"></span>
+                                        <span class="caret"></span></a>
+                                    <ul id="query-from-menu" class="dropdown-menu" style="min-width: 86px;">
+                                        <li th:each="languageType : ${languageTypes}" th:from-type-code="${languageType.code}" th:class="${languageType.code == session.transMsg.fromCode}?'from-type-choosed'">
+                                            <a href="#" th:text="${languageType.type}"></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <form th:action="@{/translate/search}" method="get" class="navbar-form navbar-left search-form">
+                                <input id="from" type="hidden" name="from" th:value="${session.transMsg.fromCode}">
+                                <input id="to" type="hidden" name="to" th:value="${session.transMsg.toCode}">
+                                <div class="form-group">
+                                    <input type="text" class="form-control search-input" style="width: 316px" name="word" th:value="${session.transMsg?.word}"
+                                           placeholder="搜索" autocomplete="off">
+                                </div>
+                                <button type="submit" class="btn btn-default search-word" style="width: 86px; margin-left: 10px;">
+                                    搜索
+                                </button>
+                            </form>
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- /.container-fluid -->
+                </nav>
+            </div>
+        </div>
+
+        <div class="row" th:unless="${#lists.isEmpty(session?.histories)}">
+            <div class="col-md-12">
+                <div>
+                    <p>历史搜索</p>
+                </div>
+                <div class="list-group">
+                    <a href="#" th:each="history, state: ${session.histories}" class="list-group-item history-list">
+                        <span th:text="${history.word}"></span>
+                        <button type="button" class="close pull-right" aria-label="Close" th:history-id="${history.id}" th:history-index="${state.index}"><span aria-hidden="true">&times;</span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pull-left" style="width: 50%;">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" style="padding: 4px 0">
+                            <ul class="nav nav-pills" id="query-to-menu">
+                                <li th:class="${languageType.code == session.transMsg.toCode}?'active'"
+                                    th:each="languageType : ${languageTypes}">
+                                    <a th:if="${languageType.id!=1}" th:text="${languageType.type}"
+                                       th:to-type-code="${languageType.code}" style="cursor: pointer"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div th:if="${session.transMsg.word != null}" class="row">
+            <div class="col-md-12">
+                <div>
+                    <p>单词释义</p>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${session.transMsg.word != null}" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h1 class="panel-title" th:text="${session.transMsg.word}"></h1>
+                    </div>
+                    <div class="panel-body">
+                        <span>音标: </span>
+                        <span>[[${session.transMsg.pronunciation}]]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div  th:if="${session.transMsg.word != null}"  class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            词义
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p th:text="${session.transMsg.mean}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div  th:if="${session.transMsg.word != null}" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            例句
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p th:text="${session.transMsg.sentence}"></p>
+                        <p th:text="${session.transMsg.sentenceTranslate}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${session.transMsg.word != null}" class="row hidden">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            笔记
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <p th:text="${session.transMsg.note}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${session.transMsg.word != null&&session.loginUser != null}" class="row">
+            <div class="col-md-12">
+                <a th:unless="${session.isAdd}" th:href="@{/note/add-note}" type="button" class="btn btn-info add-note"> 收 藏 <span
+                        class="glyphicon glyphicon-plus"></span></a>
+
+                <a th:if="${session.isAdd}" type="button" class="btn btn-info add-note disabled"> 已 收 藏 <span
+                        class="glyphicon glyphicon-plus"></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="APP_PATH" th:href="@{/}">
+<script th:src="@{/res/js/main.js}"></script>
+
+</body>
+</html>

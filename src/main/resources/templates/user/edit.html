@@ -1,0 +1,123 @@
+<!--suppress ALL-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>潘氏词典</title>
+
+    <div th:replace="common/common::common-header"></div>
+
+</head>
+<body>
+
+<div th:replace="common/common::common-top-nav"></div>
+
+<div class="container" style="width: 50%">
+    <form class="form-horizontal" th:action="@{/noteEdit/saveNote}" method="post">
+        <input type="hidden" name="id" th:value="${note.id}">
+        <input type="hidden" name="noteId" th:value="${note.noteId}">
+        <input type="hidden" name="word" th:value="${note.word}">
+        <input type="hidden" name="language" th:value="${note.language}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header" style="margin-top: 0;">
+                    <h1 style="margin-top: 0;"><small>词义编辑</small></h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h1 class="panel-title"><b th:text="${note.word}"></b></h1>
+                    </div>
+                    <div class="panel-body">
+                        <label for="pronunciation" class="col-sm-2 control-label"
+                               style="width: 30px;padding: 7px 0">音标</label>
+                        <div class="col-sm-11">
+                            <input type="text" name="pronunciation" class="form-control" id="pronunciation"
+                                   placeholder="请输入音标" th:value="${note.pronunciation}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            词义
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <label for="mean" class="col-sm-2 control-label" style="width: 30px;padding: 7px 0">词义</label>
+                        <div class="col-sm-11">
+                            <input type="text" name="mean" class="form-control" id="mean" placeholder="请输入词义" th:value="${note.mean}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            例句
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <label for="sentence" class="col-sm-2 control-label"
+                               style="width: 30px;padding: 7px 0">例句</label>
+                        <div class="col-sm-11">
+                            <input type="text" name="sentence" class="form-control" id="sentence" placeholder="请输入例句" th:value="${note.sentence}">
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <label for="sentence-translate" class="col-sm-2 control-label"
+                               style="width: 30px;padding: 7px 0">翻译</label>
+                        <div class="col-sm-11">
+                            <input type="text" name="sentenceTranslate" class="form-control" id="sentence-translate"
+                                   placeholder="请输入例句翻译" th:value="${note.sentenceTranslate}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            笔记
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <label for="note" class="col-sm-2 control-label" style="width: 30px;padding: 7px 0">笔记</label>
+                        <div class="col-sm-11">
+                            <input type="text" name="note" class="form-control" id="note" placeholder="请输入笔记" th:value="${note.note}">
+                        </div>
+                        <!--                        <textarea class="form-control" rows="3"></textarea>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center">
+                    <a th:href="@{/note/notebook}" type="button" class="btn btn-default" style="margin-right: 20px;"> 取 消 </a>
+                    <input type="submit" class="btn btn-primary" value="保 存">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+</body>
+</html>
